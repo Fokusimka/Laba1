@@ -1,0 +1,371 @@
+/*    ==Параметры сценариев==
+
+    Версия исходного сервера : SQL Server 2017 (14.0.1000)
+    Выпуск исходного ядра СУБД : Выпуск Microsoft SQL Server Enterprise Edition
+    Тип исходного ядра СУБД : Изолированный SQL Server
+
+    Версия целевого сервера : SQL Server 2014
+    Выпуск целевого ядра СУБД : Выпуск Microsoft SQL Server Enterprise Edition
+    Тип целевого ядра СУБД : Изолированный SQL Server
+*/
+USE [master]
+GO
+/****** Object:  Database [123]    Script Date: 08.10.2020 13:41:14 ******/
+IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = N'123')
+BEGIN
+CREATE DATABASE [123]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'123', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL14.SQLSERVER\MSSQL\DATA\123.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'123_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL14.SQLSERVER\MSSQL\DATA\123_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ COLLATE Cyrillic_General_CI_AS
+END
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [123].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [123] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [123] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [123] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [123] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [123] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [123] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [123] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [123] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [123] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [123] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [123] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [123] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [123] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [123] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [123] SET  DISABLE_BROKER 
+GO
+ALTER DATABASE [123] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [123] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [123] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [123] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [123] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [123] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [123] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [123] SET RECOVERY FULL 
+GO
+ALTER DATABASE [123] SET  MULTI_USER 
+GO
+ALTER DATABASE [123] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [123] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [123] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [123] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [123] SET DELAYED_DURABILITY = DISABLED 
+GO
+EXEC sys.sp_db_vardecimal_storage_format N'123', N'ON'
+GO
+/****** Object:  Login [NT SERVICE\Winmgmt]    Script Date: 08.10.2020 13:41:14 ******/
+IF NOT EXISTS (SELECT * FROM sys.server_principals WHERE name = N'NT SERVICE\Winmgmt')
+CREATE LOGIN [NT SERVICE\Winmgmt] FROM WINDOWS WITH DEFAULT_DATABASE=[master], DEFAULT_LANGUAGE=[русский]
+GO
+/****** Object:  Login [NT SERVICE\SQLWriter]    Script Date: 08.10.2020 13:41:14 ******/
+IF NOT EXISTS (SELECT * FROM sys.server_principals WHERE name = N'NT SERVICE\SQLWriter')
+CREATE LOGIN [NT SERVICE\SQLWriter] FROM WINDOWS WITH DEFAULT_DATABASE=[master], DEFAULT_LANGUAGE=[русский]
+GO
+/****** Object:  Login [NT SERVICE\SQLTELEMETRY]    Script Date: 08.10.2020 13:41:14 ******/
+IF NOT EXISTS (SELECT * FROM sys.server_principals WHERE name = N'NT SERVICE\SQLTELEMETRY')
+CREATE LOGIN [NT SERVICE\SQLTELEMETRY] FROM WINDOWS WITH DEFAULT_DATABASE=[master], DEFAULT_LANGUAGE=[русский]
+GO
+/****** Object:  Login [NT SERVICE\SQLSERVERAGENT]    Script Date: 08.10.2020 13:41:14 ******/
+IF NOT EXISTS (SELECT * FROM sys.server_principals WHERE name = N'NT SERVICE\SQLSERVERAGENT')
+CREATE LOGIN [NT SERVICE\SQLSERVERAGENT] FROM WINDOWS WITH DEFAULT_DATABASE=[master], DEFAULT_LANGUAGE=[русский]
+GO
+/****** Object:  Login [NT Service\MSSQLSERVER]    Script Date: 08.10.2020 13:41:14 ******/
+IF NOT EXISTS (SELECT * FROM sys.server_principals WHERE name = N'NT Service\MSSQLSERVER')
+CREATE LOGIN [NT Service\MSSQLSERVER] FROM WINDOWS WITH DEFAULT_DATABASE=[master], DEFAULT_LANGUAGE=[русский]
+GO
+/****** Object:  Login [NT AUTHORITY\СИСТЕМА]    Script Date: 08.10.2020 13:41:14 ******/
+IF NOT EXISTS (SELECT * FROM sys.server_principals WHERE name = N'NT AUTHORITY\СИСТЕМА')
+CREATE LOGIN [NT AUTHORITY\СИСТЕМА] FROM WINDOWS WITH DEFAULT_DATABASE=[master], DEFAULT_LANGUAGE=[русский]
+GO
+/****** Object:  Login [BUILTIN\Администраторы]    Script Date: 08.10.2020 13:41:14 ******/
+IF NOT EXISTS (SELECT * FROM sys.server_principals WHERE name = N'BUILTIN\Администраторы')
+CREATE LOGIN [BUILTIN\Администраторы] FROM WINDOWS WITH DEFAULT_DATABASE=[master], DEFAULT_LANGUAGE=[русский]
+GO
+/* For security reasons the login is created disabled and with a random password. */
+/****** Object:  Login [##MS_PolicyTsqlExecutionLogin##]    Script Date: 08.10.2020 13:41:14 ******/
+IF NOT EXISTS (SELECT * FROM sys.server_principals WHERE name = N'##MS_PolicyTsqlExecutionLogin##')
+CREATE LOGIN [##MS_PolicyTsqlExecutionLogin##] WITH PASSWORD=N'DtuQ4YniiNcHZHkPtglIlcr9HR9fxInEEg1VxnS6dIQ=', DEFAULT_DATABASE=[master], DEFAULT_LANGUAGE=[us_english], CHECK_EXPIRATION=OFF, CHECK_POLICY=ON
+GO
+ALTER LOGIN [##MS_PolicyTsqlExecutionLogin##] DISABLE
+GO
+/* For security reasons the login is created disabled and with a random password. */
+/****** Object:  Login [##MS_PolicyEventProcessingLogin##]    Script Date: 08.10.2020 13:41:14 ******/
+IF NOT EXISTS (SELECT * FROM sys.server_principals WHERE name = N'##MS_PolicyEventProcessingLogin##')
+CREATE LOGIN [##MS_PolicyEventProcessingLogin##] WITH PASSWORD=N't0hClELYb6EdArHUnYlH2hqvyW+/hE29K6Kx6Ar+MCc=', DEFAULT_DATABASE=[master], DEFAULT_LANGUAGE=[us_english], CHECK_EXPIRATION=OFF, CHECK_POLICY=ON
+GO
+ALTER LOGIN [##MS_PolicyEventProcessingLogin##] DISABLE
+GO
+ALTER AUTHORIZATION ON DATABASE::[123] TO [sa]
+GO
+ALTER SERVER ROLE [sysadmin] ADD MEMBER [NT SERVICE\Winmgmt]
+GO
+ALTER SERVER ROLE [sysadmin] ADD MEMBER [NT SERVICE\SQLWriter]
+GO
+ALTER SERVER ROLE [sysadmin] ADD MEMBER [NT SERVICE\SQLSERVERAGENT]
+GO
+ALTER SERVER ROLE [sysadmin] ADD MEMBER [NT Service\MSSQLSERVER]
+GO
+ALTER SERVER ROLE [sysadmin] ADD MEMBER [BUILTIN\Администраторы]
+GO
+USE [123]
+GO
+GRANT VIEW ANY COLUMN ENCRYPTION KEY DEFINITION TO [public] AS [dbo]
+GO
+GRANT VIEW ANY COLUMN MASTER KEY DEFINITION TO [public] AS [dbo]
+GO
+/****** Object:  Table [dbo].[Заказ]    Script Date: 08.10.2020 13:41:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Заказ]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[Заказ](
+	[Номер] [int] NOT NULL,
+	[Дата] [date] NULL,
+	[Этап выполнения] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL,
+	[Заказчик] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL,
+	[Менеджер] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL,
+	[Стоимость] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL,
+ CONSTRAINT [PK_Заказ] PRIMARY KEY CLUSTERED 
+(
+	[Номер] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO
+ALTER AUTHORIZATION ON [dbo].[Заказ] TO  SCHEMA OWNER 
+GO
+/****** Object:  Table [dbo].[Заказные изделия]    Script Date: 08.10.2020 13:41:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Заказные изделия]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[Заказные изделия](
+	[Номер заказа] [int] NOT NULL,
+	[Артикул изделия] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL,
+	[Количество] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL,
+ CONSTRAINT [PK_Заказные изделия] PRIMARY KEY CLUSTERED 
+(
+	[Номер заказа] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO
+ALTER AUTHORIZATION ON [dbo].[Заказные изделия] TO  SCHEMA OWNER 
+GO
+/****** Object:  Table [dbo].[Изделие]    Script Date: 08.10.2020 13:41:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Изделие]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[Изделие](
+	[Арктикул] [int] NOT NULL,
+	[Наименование] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL,
+	[Ширина] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL,
+	[Длинна] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL,
+	[Изоброжение] [nchar](10) COLLATE Cyrillic_General_CI_AS NOT NULL,
+	[Комментарий] [nchar](10) COLLATE Cyrillic_General_CI_AS NOT NULL,
+ CONSTRAINT [PK_Изделие] PRIMARY KEY CLUSTERED 
+(
+	[Арктикул] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO
+ALTER AUTHORIZATION ON [dbo].[Изделие] TO  SCHEMA OWNER 
+GO
+/****** Object:  Table [dbo].[Пользователь]    Script Date: 08.10.2020 13:41:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Пользователь]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[Пользователь](
+	[Логин] [int] NOT NULL,
+	[Пароль] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL,
+	[Роль] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL,
+	[Наименование] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL,
+ CONSTRAINT [PK_Пользователь] PRIMARY KEY CLUSTERED 
+(
+	[Логин] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO
+ALTER AUTHORIZATION ON [dbo].[Пользователь] TO  SCHEMA OWNER 
+GO
+/****** Object:  Table [dbo].[Склад ткани]    Script Date: 08.10.2020 13:41:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Склад ткани]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[Склад ткани](
+	[Рулон] [nchar](10) COLLATE Cyrillic_General_CI_AS NOT NULL,
+	[Артикул ткани] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL,
+	[Ширина] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL,
+	[Длина] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL,
+ CONSTRAINT [PK_Склад ткани] PRIMARY KEY CLUSTERED 
+(
+	[Рулон] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO
+ALTER AUTHORIZATION ON [dbo].[Склад ткани] TO  SCHEMA OWNER 
+GO
+/****** Object:  Table [dbo].[Склад фурнитуры]    Script Date: 08.10.2020 13:41:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Склад фурнитуры]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[Склад фурнитуры](
+	[Партия] [nchar](10) COLLATE Cyrillic_General_CI_AS NOT NULL,
+	[Артикул фурнитуры] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL,
+	[Количество] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL,
+ CONSTRAINT [PK_Склад фурнитуры] PRIMARY KEY CLUSTERED 
+(
+	[Партия] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO
+ALTER AUTHORIZATION ON [dbo].[Склад фурнитуры] TO  SCHEMA OWNER 
+GO
+/****** Object:  Table [dbo].[Ткани изделия]    Script Date: 08.10.2020 13:41:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Ткани изделия]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[Ткани изделия](
+	[Артикул ткани] [nchar](10) COLLATE Cyrillic_General_CI_AS NOT NULL,
+	[Артикул изделия] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL,
+ CONSTRAINT [PK_Ткани изделия] PRIMARY KEY CLUSTERED 
+(
+	[Артикул ткани] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO
+ALTER AUTHORIZATION ON [dbo].[Ткани изделия] TO  SCHEMA OWNER 
+GO
+/****** Object:  Table [dbo].[Ткань]    Script Date: 08.10.2020 13:41:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Ткань]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[Ткань](
+	[Артикул] [nchar](10) COLLATE Cyrillic_General_CI_AS NOT NULL,
+	[Наименование] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL,
+	[Цвет] [nchar](10) COLLATE Cyrillic_General_CI_AS NOT NULL,
+	[Рисунок] [nchar](10) COLLATE Cyrillic_General_CI_AS NOT NULL,
+	[Изображение] [nchar](10) COLLATE Cyrillic_General_CI_AS NOT NULL,
+	[Состав] [nchar](10) COLLATE Cyrillic_General_CI_AS NOT NULL,
+	[Ширина] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL,
+	[Длина] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL,
+	[Цена] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL,
+ CONSTRAINT [PK_Ткань] PRIMARY KEY CLUSTERED 
+(
+	[Артикул] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO
+ALTER AUTHORIZATION ON [dbo].[Ткань] TO  SCHEMA OWNER 
+GO
+/****** Object:  Table [dbo].[Фурнитура]    Script Date: 08.10.2020 13:41:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Фурнитура]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[Фурнитура](
+	[Артикул] [nchar](10) COLLATE Cyrillic_General_CI_AS NOT NULL,
+	[Наименование] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL,
+	[Тип] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL,
+	[Ширина] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL,
+	[Длина] [nchar](10) COLLATE Cyrillic_General_CI_AS NOT NULL,
+	[Вес] [nchar](10) COLLATE Cyrillic_General_CI_AS NOT NULL,
+	[Изображение] [nchar](10) COLLATE Cyrillic_General_CI_AS NOT NULL,
+	[Цена] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL,
+ CONSTRAINT [PK_Фурнитура] PRIMARY KEY CLUSTERED 
+(
+	[Артикул] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO
+ALTER AUTHORIZATION ON [dbo].[Фурнитура] TO  SCHEMA OWNER 
+GO
+/****** Object:  Table [dbo].[Фурнитура изделия]    Script Date: 08.10.2020 13:41:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Фурнитура изделия]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[Фурнитура изделия](
+	[Артикул фурнитуры] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL,
+	[Артикул изделия] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL,
+	[Размещение] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL,
+	[Ширина] [nchar](10) COLLATE Cyrillic_General_CI_AS NOT NULL,
+	[Длина] [nchar](10) COLLATE Cyrillic_General_CI_AS NOT NULL,
+	[Поворот] [nchar](10) COLLATE Cyrillic_General_CI_AS NOT NULL,
+	[Количество] [nchar](10) COLLATE Cyrillic_General_CI_AS NULL
+) ON [PRIMARY]
+END
+GO
+ALTER AUTHORIZATION ON [dbo].[Фурнитура изделия] TO  SCHEMA OWNER 
+GO
+USE [master]
+GO
+ALTER DATABASE [123] SET  READ_WRITE 
+GO
